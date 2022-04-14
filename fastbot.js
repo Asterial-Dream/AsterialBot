@@ -21,7 +21,7 @@ client.on('messageCreate', async message => {
 	if (message.author.id != client.user.id) {
 		if (message.content.startsWith(prefix)) {
 			await (message.channel.send(`${message.author.username} typed in ${message.content}`));
-			message.channel.send(`Prefix: ${message.content.charAt(0)} \nContent: ${message.content.substring(1)}`);
+			// TEST: message.channel.send(`Prefix: ${message.content.charAt(0)} \nContent: ${message.content.substring(1)}`);
 			const content = message;
 			commandhandler(content);
 			return;

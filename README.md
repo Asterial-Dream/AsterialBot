@@ -1,4 +1,4 @@
-# Project-FastBot
+# Project FastBot
 ## Documentation
   > To be edited.
 ## Contributors

@@ -1,7 +1,9 @@
-const shutdown = require('./functions.js').shutdown;
-const diceroll = require('./functions.js').diceroll;
-const commandList = ['shutdown', 'diceroll'];
-const functionList = [shutdown, diceroll];
+const tictactoe = require('./commands/tictactoe.js').tictactoe;
+const shutdown = require('./commands/shutdown.js').shutdown;
+const diceroll = require('./commands/diceroll.js').diceroll;
+const myid = require('./commands/id.js').myid;
+const commandList = ['shutdown', 'diceroll', 'tictactoe', 'myid'];
+const functionList = [shutdown, diceroll, tictactoe, myid];
 
 module.exports = function commandhandler(message) {
     const args = [];

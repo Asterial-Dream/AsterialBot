@@ -15,7 +15,6 @@ client.once('ready', () => {
 // Login to Discord with your client's token //
 client.login(token);
 
-
 // When the client receives a message from a certain user, run this code //
 client.on('messageCreate', async message => {
 	if (message.author.id != client.user.id) {

@@ -2,7 +2,11 @@
 const { Client, Intents, ClientUser } = require('discord.js');
 const commandhandler = require('./commandhandler.js');
 const { token } = require('./config.json');
+
+// Further additional prerequisites
+const fs = require('fs');
 const prefix = '!';
+
 // Creates a new client instance //
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
@@ -28,5 +32,21 @@ client.on('messageCreate', async message => {
 	}
 	else {
 		return;
+	}
+});
+
+client.on('guildCreate', async guild => {
+	if (!fs.existsSync('./user/' + guild.id + 'userCache', 'utf-8')) {
+        fs.writeFile('./user/' + guild.id + 'userCache', '[[START OF DATA]');
+    }
+});
+
+client.on('guildDelete', async guild => {
+	if (fs.existsSync('./user/' + guild.id + 'userCache', 'utf-8')) {
+		fs.unlink('./user/' + guild.id + 'userCache', (err) => {
+			if (err) {
+				return;
+			}
+		});
 	}
 });

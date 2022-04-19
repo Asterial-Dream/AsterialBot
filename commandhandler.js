@@ -2,8 +2,9 @@ const tictactoe = require('./commands/tictactoe.js').tictactoe;
 const shutdown = require('./commands/shutdown.js').shutdown;
 const diceroll = require('./commands/diceroll.js').diceroll;
 const myid = require('./commands/id.js').myid;
-const commandList = ['shutdown', 'diceroll', 'tictactoe', 'myid'];
-const functionList = [shutdown, diceroll, tictactoe, myid];
+const balance = require('./commands/balance.js').balance;
+const commandList = ['shutdown', 'diceroll', 'tictactoe', 'myid', 'balance'];
+const functionList = [shutdown, diceroll, tictactoe, myid, balance];
 
 module.exports = function commandhandler(message) {
     const args = [];

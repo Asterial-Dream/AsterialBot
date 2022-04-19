@@ -26,7 +26,7 @@ client.on('messageCreate', async message => {
 			await (message.channel.send(`${message.author.username} typed in ${message.content}`));
 			// TEST: message.channel.send(`Prefix: ${message.content.charAt(0)} \nContent: ${message.content.substring(1)}`);
 			const content = message;
-			commandhandler(content);
+			commandhandler(content, client);
 			return;
 		}
 	}

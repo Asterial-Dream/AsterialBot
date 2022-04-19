@@ -1,12 +1,15 @@
+const { triviaShowdown } = require('./commands/triviashowdown');
+
 const tictactoe = require('./commands/tictactoe.js').tictactoe;
 const shutdown = require('./commands/shutdown.js').shutdown;
 const diceroll = require('./commands/diceroll.js').diceroll;
 const myid = require('./commands/id.js').myid;
 const balance = require('./commands/balance.js').balance;
-const commandList = ['shutdown', 'diceroll', 'tictactoe', 'myid', 'balance'];
-const functionList = [shutdown, diceroll, tictactoe, myid, balance];
+const triviashowdown = require('./commands/triviashowdown').triviaShowdown;
+const commandList = ['shutdown', 'diceroll', 'tictactoe', 'myid', 'balance', 'triviashowdown'];
+const functionList = [shutdown, diceroll, tictactoe, myid, balance, triviaShowdown];
 
-module.exports = function commandhandler(message) {
+module.exports = async function commandhandler(message, client) {
     const args = [];
     let msg = message.content;
 
@@ -33,7 +36,7 @@ module.exports = function commandhandler(message) {
 
     // Now that is seperated, check for function validity...
     if (commandList.includes(args.at(1))) {
-        functionList[commandList.indexOf(args.at(1))](message, args);
+        functionList[commandList.indexOf(args.at(1))](message, args, client);
         return;
     }
     else {

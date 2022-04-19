@@ -1,7 +1,7 @@
 const fs = require('fs');
 const User = require('../user.js').User;
 
-module.exports.userDataSearch = function search(message, args) {
+module.exports.userDataSearch = async function search(message, args) {
     const userData = new User(message.author.id);
     let data = undefined;
 

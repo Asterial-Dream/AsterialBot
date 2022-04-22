@@ -2,7 +2,79 @@
 
 const { embed, MessageEmbed, MessageButton, MessageActionRow, Interaction, InteractionCollector } = require("discord.js")
 
+
+class questionPrompt {
+    constructor(question) {
+        this.aSel = 0;
+        this.bSel = 0;
+        this.cSel = 0;
+        this.dSel = 0;
+
+        this.questionEmbed = new MessageEmbed()
+            .setTitle(question)
+            .setColor('#0099ff')
+            .addField('Answer A', `**${this.aSel}**`)
+            .addField('Answer B', `**${this.bSel}**`)
+            .addField('Answer C', `**${this.cSel}**`)
+            .addField('Answer D', `**${this.dSel}**`);
+    }
+    // Mutators
+    updatePrompt() {
+        this.questionEmbed.splice(0, 1, `Answer A', **${this.aSel}**`);
+        this.questionEmbed.splice(1, 1, `Answer B', **${this.bSel}**`);
+        this.questionEmbed.splice(2, 1, `Answer C', **${this.cSel}**`);
+        this.questionEmbed.splice(3, 1, `Answer D', **${this.dSel}**`);
+    }
+
+    updateASum(sum) {
+        this.aSel = sum;
+    }
+
+    updateBSum(sum) {
+        this.bSel = sum;
+    }
+
+    updateCSum(sum) {
+        this.cSel = sum;
+    }
+
+    updateDSum(sum) {
+        this.dSel = sum;
+    }
+
+    // Accessors
+    getASum() {
+        return this.aSel;
+    }
+
+    getBSum() {
+        return this.bSel;
+    }
+
+    getCSum() {
+        return this.cSel;
+    }
+
+    getDSum() {
+        return this.dSel;
+    }
+
+    getEmbed() {
+        return this.questionEmbed;
+    }
+}
+
+
+function questionPromptCreate(question) {
+    const prompt = new questionPrompt(question);
+    return prompt;
+}
+
+
 async function promptQuestion(message, args) {
+
+    const prompt = questionPromptCreate('Test Prompt');
+
     const buttonA = new MessageButton()
         .setCustomId('AnswerA')
         .setLabel('A')
@@ -23,41 +95,32 @@ async function promptQuestion(message, args) {
 
     const buttonOutputs = new MessageActionRow({ components: [buttonA, buttonB, buttonC, buttonD], type: 2 });
 
-    const questionPrompt = new MessageEmbed()
-        .addField('Answer A:', '**0** - 0%')
-        .addField('Answer B:', '**0** - 0%')
-        .addField('Answer C:', '**0** - 0%')
-        .addField('Answer D:', '**0** - 0%')
-        .setTitle('Prompt Test')
-        .setColor(0x00AE86);
-
-    message.channel.send({ embeds: [questionPrompt], components: [buttonOutputs] });
-
-    return; 
-}
-
-function answerReciever(message, args, client) {
-    const answerCollection = new InteractionCollector(client, { channel: message.channel, message: message, guild: message.guild, interactionType: 3, componentType: 2, time: 10000 });
-    console.log(answerCollection.options.interactionType);
-    const endCollection = function(collector) {
-        collector.stop('Time Limit Exceeded');
-        console.log('Time Limit Exceeded');
-    };
-    // message.channel.send(`Listening on ${answerCollection.options.channel.id} on ${answerCollection.options.guild.id} for message ${answerCollection.options.message.id}.`);
-    console.log('Collection Started.');
-
-    answerCollection.on('collect', (interaction) => {
-        /*if (answerCollection.users.get(interaction.user.id)) {
-            answerCollection.dispose(answerCollection.users.get(interaction.user.id));
-            answerCollection.users.delete(interaction.user);
-        } */
-        interaction.reply(`User ${interaction.user.id} has interacted with an answer.`);
-        answerCollection.handleCollect(interaction);
-        console.log('Collection Detected');
-    });
+    message.channel.send({ embeds: [prompt.getEmbed()], components: [buttonOutputs] });
 
     return;
 }
+
+function answerReciever(message, args, client) {
+    const answerCollection = new InteractionCollector(client, { channel: message.channel, message: message, guild: message.guild, interactionType: 3, componentType: 2 });
+    console.log(answerCollection.options.interactionType);
+    const endCollection = function(collector) {
+        collector.stop('Time ran out.');
+        console.log('Time Limit Exceeded');
+        answerCollection.off('collect', () => { return; });
+        return;
+    };
+    // message.channel.send(`Listening on ${answerCollection.options.channel.id} on ${answerCollection.options.guild.id} for message ${answerCollection.options.message.id}.`);
+    console.log('Collection Started.');
+    setTimeout(endCollection, 5000, answerCollection);
+
+
+    answerCollection.on('collect', (interaction) => {
+        console.log('Answer Collected.');
+        interaction.reply()
+    });
+    return;
+}
+
 
 module.exports.triviaShowdown = function triviaShowdown(message, args, client) {
     client.once('messageCreate', (sentMessage) => {
